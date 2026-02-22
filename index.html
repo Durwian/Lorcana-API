@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="form" width="100%">
+            <label for="sets">Escull un set :</label>
+            <select id="sets" name="sets">
+                
+            </select>
+
+        </div>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Número</th>
+                    <th>Imatge</th>
+                    <th>Nom</th>
+                    <th>Descripció</th>
+                </tr>               
+                <tbody id="data"></tbody>
+            </table>
+
+    </div>
+    
+    <script>
+        let url = 'https://api.lorcana-api.com/cards/fetch?displayonly=Set_Num;Set_Name;name;image;set_num;card_num;body_text';
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                allCards = data;  
+                mostrarData(data);
+            })
+            .catch(error => console.log(error))
+
+        const mostrarData = (data) => {
+            console.log(data);
+            let table = '';
+            let nextSet = data[0].Set_Name;
+            
+            let select = "";
+            let sets_name = [];
+            for(let i = 0; i < data.length; i++){
+                if(sets_name.indexOf(data[i].Set_Name) === -1){
+                    sets_name.push(data[i].Set_Name);
+                }
+            }
+            for(let option of sets_name){
+                select += `<option value="${option}">${option}</option>`;
+            }
+            
+            document.getElementById('sets').innerHTML = select;
+
+        }
+        const mostrarTaula = (setSeleccionat) => {
+
+            let table = "";
+
+            let cartesFiltrades = allCards.filter(card => 
+                card.Set_Name === setSeleccionat
+            );
+
+            for(let card of cartesFiltrades){
+
+                table += `
+                    <tr>
+                        <td>${card.Card_Num}</td>
+                        <td><img src="${card.Image}" width="100"></td>
+                        <td>${card.Name}</td>
+                        <td>${card.Body_Text ?? ""}</td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById('data').innerHTML = table;
+        }
+        
+        document.getElementById('sets').addEventListener('change', function() {
+        let selectedSet = this.value;
+        mostrarTaula(selectedSet);
+        });
+        
+    </script>
+</body>
+</html>
