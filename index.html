@@ -7,13 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
+    <div class="container ">
         <div class="form" width="100%">
             <label for="sets">Escull un set :</label>
             <select id="sets" name="sets">
                 
             </select>
-
+            <label for="colors">Escull un color :</label>
+            <select id="colors" name="colors">
+                
+            </select>
         </div>
             <table class="table table-bordered table-striped">
                 <tr>
@@ -28,8 +31,10 @@
     </div>
     
     <script>
-        let url = 'https://api.lorcana-api.com/cards/fetch?displayonly=Set_Num;Set_Name;name;image;set_num;card_num;body_text';
-
+        let url = 'https://api.lorcana-api.com/cards/fetch?displayonly=Set_Num;Set_Name;name;image;set_num;card_num;body_text;color';
+        let allCards = [];
+        let selectedSet = "";
+        let selectedColor = "";
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -40,33 +45,38 @@
 
         const mostrarData = (data) => {
             console.log(data);
-            let table = '';
             let nextSet = data[0].Set_Name;
             
-            let select = "";
+            let select = `<option value="">Tots</option>`;
+            let select_colors = `<option value="">Tots</option>`;
             let sets_name = [];
+            let colors = [];
             for(let i = 0; i < data.length; i++){
                 if(sets_name.indexOf(data[i].Set_Name) === -1){
                     sets_name.push(data[i].Set_Name);
+                }
+                if(colors.indexOf(data[i].Color) === -1){
+                    colors.push(data[i].Color);
                 }
             }
             for(let option of sets_name){
                 select += `<option value="${option}">${option}</option>`;
             }
-            
+            for(let option of colors){
+                select_colors += `<option value="${option}">${option}</option>`;
+            }
             document.getElementById('sets').innerHTML = select;
-
+            document.getElementById('colors').innerHTML = select_colors;
         }
-        const mostrarTaula = (setSeleccionat) => {
+        const mostrarTaula = (setSeleccionat, colorSeleccionat) => {
 
             let table = "";
-
             let cartesFiltrades = allCards.filter(card => 
-                card.Set_Name === setSeleccionat
+                (setSeleccionat === "" || card.Set_Name === setSeleccionat) &&
+                (colorSeleccionat === "" || card.Color === colorSeleccionat)
             );
 
             for(let card of cartesFiltrades){
-
                 table += `
                     <tr>
                         <td>${card.Card_Num}</td>
@@ -76,13 +86,17 @@
                     </tr>
                 `;
             }
-
             document.getElementById('data').innerHTML = table;
         }
         
         document.getElementById('sets').addEventListener('change', function() {
         let selectedSet = this.value;
-        mostrarTaula(selectedSet);
+        mostrarTaula(selectedSet, selectedColor);
+        });
+
+        document.getElementById('colors').addEventListener('change', function() {
+        let selectedColor = this.value;
+        mostrarTaula(selectedSet, selectedColor);
         });
         
     </script>
