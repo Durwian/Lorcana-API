@@ -6,28 +6,31 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
-<body>
+<body class="bg-warning bg-gradient">
+    <div class="row"><img src="https://tpkhobbygames.com/c/54-category_default/lorcana.jpg" height="device-width" alt="" srcset=""></div>
     <div class="container ">
-        <div class="form" width="100%">
-            <label for="sets">Escull un set :</label>
-            <select id="sets" name="sets">
-                
-            </select>
-            <label for="colors">Escull un color :</label>
-            <select id="colors" name="colors">
-                
-            </select>
+        <div class="row">
+            <div class="col mb-3 mt-3">
+                <div class="form-floating ">
+                    <select id="sets" class="form-select"  name="sets" aria-label="Floating label select example"></select>
+                    <label for="sets" for="floatingSelect">Escull un set :</label>
+                </div>
+            </div>
+            <div class="col">
+            <div class="form-floating mb-3 mt-3">
+                <select id="colors" class="form-select" name="colors" ></select>
+                <label for="colors" for="floatingSelect">Escull un color :</label>
+            </div></div>
         </div>
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>Número</th>
-                    <th>Imatge</th>
-                    <th>Nom</th>
-                    <th>Descripció</th>
-                </tr>               
-                <tbody id="data"></tbody>
-            </table>
-
+        <table class="table table-dark table-bordered table-striped">
+            <tr>
+                <th>Número</th>
+                <th>Imatge</th>
+                <th>Nom</th>
+                <th>Descripció</th>
+            </tr>               
+            <tbody id="data"></tbody>
+        </table>
     </div>
     
     <script>
@@ -47,8 +50,8 @@
             console.log(data);
             let nextSet = data[0].Set_Name;
             
-            let select = `<option value="">Tots</option>`;
-            let select_colors = `<option value="">Tots</option>`;
+            let select = `<option selected>Tots</option>`;
+            let select_colors = `<option selected>Tots</option>`;
             let sets_name = [];
             let colors = [];
             for(let i = 0; i < data.length; i++){
