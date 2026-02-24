@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="./index.js" defer></script>
 </head>
 <body class="bg-warning bg-gradient">
-    <div class="row"><img src="https://tpkhobbygames.com/c/54-category_default/lorcana.jpg" height="device-width" alt="" srcset=""></div>
+    <div class="row col-5">
+        <img src="https://tpkhobbygames.com/c/54-category_default/lorcana.jpg" height="200" width="100" alt="" srcset="">
+        <span style="font-size: 34px;text-align: center;">de la Júlia</span>
+    </div>
     <div class="container ">
         <div class="row">
             <div class="col mb-3 mt-3">
                 <div class="form-floating ">
-                    <select id="sets" class="form-select"  name="sets" aria-label="Floating label select example"></select>
+                    <select id="sets" class="form-select"></select>
                     <label for="sets" for="floatingSelect">Escull un set :</label>
                 </div>
             </div>
@@ -22,7 +26,7 @@
                 <label for="colors" for="floatingSelect">Escull un color :</label>
             </div></div>
         </div>
-        <table class="table table-dark table-bordered table-striped">
+        <table class="table table-dark table-responsive table-striped">
             <tr>
                 <th>Número</th>
                 <th>Imatge</th>
@@ -33,75 +37,6 @@
         </table>
     </div>
     
-    <script>
-        let url = 'https://api.lorcana-api.com/cards/fetch?displayonly=Set_Num;Set_Name;name;image;set_num;card_num;body_text;color';
-        let allCards = [];
-        let selectedSet = "";
-        let selectedColor = "";
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                allCards = data;  
-                mostrarData(data);
-            })
-            .catch(error => console.log(error))
-
-        const mostrarData = (data) => {
-            console.log(data);
-            let nextSet = data[0].Set_Name;
-            
-            let select = `<option selected>Tots</option>`;
-            let select_colors = `<option selected>Tots</option>`;
-            let sets_name = [];
-            let colors = [];
-            for(let i = 0; i < data.length; i++){
-                if(sets_name.indexOf(data[i].Set_Name) === -1){
-                    sets_name.push(data[i].Set_Name);
-                }
-                if(colors.indexOf(data[i].Color) === -1){
-                    colors.push(data[i].Color);
-                }
-            }
-            for(let option of sets_name){
-                select += `<option value="${option}">${option}</option>`;
-            }
-            for(let option of colors){
-                select_colors += `<option value="${option}">${option}</option>`;
-            }
-            document.getElementById('sets').innerHTML = select;
-            document.getElementById('colors').innerHTML = select_colors;
-        }
-        const mostrarTaula = (setSeleccionat, colorSeleccionat) => {
-
-            let table = "";
-            let cartesFiltrades = allCards.filter(card => 
-                (setSeleccionat === "" || card.Set_Name === setSeleccionat) &&
-                (colorSeleccionat === "" || card.Color === colorSeleccionat)
-            );
-
-            for(let card of cartesFiltrades){
-                table += `
-                    <tr>
-                        <td>${card.Card_Num}</td>
-                        <td><img src="${card.Image}" width="100"></td>
-                        <td>${card.Name}</td>
-                        <td>${card.Body_Text ?? ""}</td>
-                    </tr>
-                `;
-            }
-            document.getElementById('data').innerHTML = table;
-        }
-        
-        document.getElementById('sets').addEventListener('change', function() {
-        let selectedSet = this.value;
-        mostrarTaula(selectedSet, selectedColor);
-        });
-
-        document.getElementById('colors').addEventListener('change', function() {
-        let selectedColor = this.value;
-        mostrarTaula(selectedSet, selectedColor);
-        });
-        
-    </script>
+    
 </body>
 </html>
