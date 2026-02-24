@@ -3,6 +3,11 @@ let url = 'https://api.lorcana-api.com/cards/fetch?displayonly=Set_Num;Set_Name;
 let allCards = [];
 let selectedSet = "";
 let selectedColor = "";
+let colleccio = JSON.parse(localStorage.getItem("colleccio")) || {};
+const getQuantitat = (cardSetNum, cardNum) => {
+    const key = `${cardSetNum}-${cardNum}`;
+    return colleccio[key] || 0;
+}
 
 fetch(url)
     .then(response => response.json())
@@ -52,6 +57,11 @@ const mostrarTaula = (setSeleccionat, colorSeleccionat) => {
                 <td><img src="${card.Image}" width="100"></td>
                 <td>${card.Name}</td>
                 <td>${card.Body_Text ?? ""}</td>
+                <td>
+                    <input type="number" min="0" value="${getQuantitat(card.Set_Num, card.Card_Num)}"
+                    onchange="actualitzarColleccio('${card.Set_Num}',${card.Card_Num}, this.value)"
+                    style="width:70px">
+                </td>
             </tr>
         `;
     }
@@ -68,3 +78,16 @@ document.getElementById('colors').addEventListener('change', function() {
     mostrarTaula(selectedSet, selectedColor);
 });
         
+const actualitzarColleccio = (cardSetNum, cardNum, quantitat) => {
+
+    const key = `${cardSetNum}-${cardNum}`;
+    quantitat = parseInt(quantitat);
+
+    if(quantitat > 0){
+        colleccio[key] = quantitat;
+    } else {
+        delete colleccio[key];
+    }
+
+    localStorage.setItem("colleccio", JSON.stringify(colleccio));
+}
