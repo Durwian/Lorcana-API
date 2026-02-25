@@ -62,8 +62,8 @@ const mostrarTaula = (setSeleccionat, colorSeleccionat) => {
                          onclick="mostrarDetall('${card.Card_Num}')">
 
                     <input type="number" min="0" 
-                        value="${getQuantitat(card.Card_Num)}"
-                        onchange="actualitzarColleccio('${card.Card_Num}', this.value)"
+                        value="${getQuantitat(card.Set_Num,card.Card_Num)}"
+                        onchange="actualitzarColleccio('${card.Set_Num}', '${card.Card_Num}', this.value)"
                         class="form-control mt-2">
                 </div>
             </div>
@@ -75,11 +75,14 @@ const mostrarTaula = (setSeleccionat, colorSeleccionat) => {
 
 const mostrarDetall = (cardNum) => {
 
-    let card = allCards.find(c => c.Card_Num == cardNum);
+    let card = allCards.find(c => c.Card_Num == cardNum && (selectedSet === "" || c.Set_Name === selectedSet));
 
     document.getElementById("modalTitle").textContent = card.Name;
+    document.getElementById("modalImage").innerHTML = `<img src="${card.Image}" class="img-fluid">`;
+    document.getElementById("modalSet").textContent = card.Set_Name;
     document.getElementById("modalNumber").textContent = card.Card_Num;
     document.getElementById("modalDescription").textContent = card.Body_Text ?? "";
+    
 
     let modal = new bootstrap.Modal(document.getElementById('cardModal'));
     modal.show();
