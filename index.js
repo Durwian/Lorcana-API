@@ -44,28 +44,45 @@ const mostrarData = (data) => {
 }
 const mostrarTaula = (setSeleccionat, colorSeleccionat) => {
 
-    let table = "";
+    let html = "";
+
     let cartesFiltrades = allCards.filter(card => 
         (setSeleccionat === "" || card.Set_Name === setSeleccionat) &&
         (colorSeleccionat === "" || card.Color === colorSeleccionat)
     );
 
     for(let card of cartesFiltrades){
-        table += `
-            <tr>
-                <td>${card.Card_Num}</td>
-                <td><img src="${card.Image}" width="100"></td>
-                <td>${card.Name}</td>
-                <td>${card.Body_Text ?? ""}</td>
-                <td>
-                    <input type="number" min="0" value="${getQuantitat(card.Set_Num, card.Card_Num)}"
-                    onchange="actualitzarColleccio('${card.Set_Num}',${card.Card_Num}, this.value)"
-                    style="width:70px">
-                </td>
-            </tr>
+
+        html += `
+            <div class="col-md-4 mb-4 text-center">
+                <div class="card p-2">
+                    <img src="${card.Image}" 
+                         class="img-fluid"
+                         style="cursor:pointer"
+                         onclick="mostrarDetall('${card.Card_Num}')">
+
+                    <input type="number" min="0" 
+                        value="${getQuantitat(card.Card_Num)}"
+                        onchange="actualitzarColleccio('${card.Card_Num}', this.value)"
+                        class="form-control mt-2">
+                </div>
+            </div>
         `;
     }
-    document.getElementById('data').innerHTML = table;
+
+    document.getElementById('data').innerHTML = html;
+}
+
+const mostrarDetall = (cardNum) => {
+
+    let card = allCards.find(c => c.Card_Num == cardNum);
+
+    document.getElementById("modalTitle").textContent = card.Name;
+    document.getElementById("modalNumber").textContent = card.Card_Num;
+    document.getElementById("modalDescription").textContent = card.Body_Text ?? "";
+
+    let modal = new bootstrap.Modal(document.getElementById('cardModal'));
+    modal.show();
 }
 
 document.getElementById('sets').addEventListener('change', function() {

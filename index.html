@@ -26,7 +26,7 @@
                 <label for="colors" for="floatingSelect">Escull un color :</label>
             </div></div>
         </div>
-        <table class="table table-dark table-responsive table-striped">
+        <!--<table class="table table-dark table-responsive table-striped">
             <tr>
                 <th>Número</th>
                 <th>Imatge</th>
@@ -34,10 +34,24 @@
                 <th>Descripció</th>
                 <th class="m-2">Afegir a la col·lecció</th>
             </tr>               
-            <tbody id="data"></tbody>
-        </table>
+            <tbody id="data" class="table-group-divider " style="scroll-behavior: smooth;"></tbody>
+        </table>-->
     </div>
-    
+<div class="row col-10 m-auto" id="data"></div>
+<div class="modal fade" id="cardModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Número:</strong> <span id="modalNumber"></span></p>
+        <p id="modalDescription"></p>
+      </div>
+    </div>
+  </div>
+</div>
     
 </body>
 </html>
